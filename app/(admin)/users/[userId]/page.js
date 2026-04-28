@@ -112,10 +112,6 @@ export default async function UserDetailPage({ params }) {
 
         <div className="panel-body user-facts">
           <div>
-            <span className="muted">User ID</span>
-            <code>{user._id || user.id}</code>
-          </div>
-          <div>
             <span className="muted">Created</span>
             <strong>{formatDateTime(user.createdAt)}</strong>
           </div>

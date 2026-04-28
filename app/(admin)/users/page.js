@@ -56,7 +56,7 @@ export default async function UsersPage({ searchParams }) {
         <div className="panel-filters">
           <ListFilters
             searchKey="search"
-            searchPlaceholder="Search by email…"
+            searchPlaceholder="Search by username / email…"
             filters={[
               {
                 key: "isVerified",

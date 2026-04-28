@@ -43,7 +43,7 @@ export default async function ActivitiesPage({ searchParams }) {
         <div className="panel-filters">
           <ListFilters
             searchKey="userId"
-            searchPlaceholder="Filter by user ID…"
+            searchPlaceholder="Filter by user name…"
             filters={[
               ...(hasUserId
                 ? [
