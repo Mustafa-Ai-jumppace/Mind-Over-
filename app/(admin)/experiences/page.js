@@ -3,6 +3,7 @@ import * as adminApi from "../../../lib/api/admin";
 import ListFilters from "../../../components/ListFilters";
 import Paginator from "../../../components/Paginator";
 import UserAvatar from "../../../components/UserAvatar";
+import DeleteButton from "../../../components/DeleteButton";
 
 export const dynamic = "force-dynamic";
 
@@ -52,9 +53,6 @@ export default async function ExperiencesPage({ searchParams }) {
       <section className="panel">
         <div className="panel-header">
           <h2>Experiences</h2>
-          <span className="muted">
-            <code>GET /admin/experience/list</code>
-          </span>
         </div>
         <div className="panel-filters">
           <ListFilters
@@ -106,7 +104,17 @@ export default async function ExperiencesPage({ searchParams }) {
                       ) : (
                         <span className="muted">Anonymous</span>
                       )}
-                      <span className="review-rating">{stars(e.rating)}</span>
+                      <div className="review-actions">
+                        <span className="review-rating">{stars(e.rating)}</span>
+                        <DeleteButton
+                          label="Delete"
+                          confirmText="Delete this experience permanently?"
+                          href={`/api/admin/experience/${encodeURIComponent(
+                            e._id || e.id
+                          )}`}
+                          className="danger-button compact"
+                        />
+                      </div>
                     </div>
                     <div className="review-body">
                       {e.comment || <span className="muted">No comment</span>}

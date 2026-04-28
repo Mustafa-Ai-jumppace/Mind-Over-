@@ -108,9 +108,6 @@ export default function AnnouncementsPage() {
       <section className="panel">
         <div className="panel-header">
           <h2>Send announcement</h2>
-          <span className="muted">
-            <code>POST /admin/notifications/send-announcement-notification</code>
-          </span>
         </div>
 
         <form onSubmit={submit} className="panel-body announcement-form">

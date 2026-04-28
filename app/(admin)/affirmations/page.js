@@ -3,6 +3,8 @@ import * as adminApi from "../../../lib/api/admin";
 import ListFilters from "../../../components/ListFilters";
 import Paginator from "../../../components/Paginator";
 import UserAvatar from "../../../components/UserAvatar";
+import AffirmationPlayButton from "../../../components/AffirmationPlayButton";
+import DeleteButton from "../../../components/DeleteButton";
 
 export const dynamic = "force-dynamic";
 
@@ -39,9 +41,6 @@ export default async function AffirmationsPage({ searchParams }) {
       <section className="panel">
         <div className="panel-header">
           <h2>Affirmations</h2>
-          <span className="muted">
-            <code>GET /admin/affirmations/list</code>
-          </span>
         </div>
         <div className="panel-filters">
           <ListFilters
@@ -71,15 +70,17 @@ export default async function AffirmationsPage({ searchParams }) {
             <thead>
               <tr>
                 <th>Title</th>
+                <th>Play</th>
                 <th>Owner</th>
                 <th>Created</th>
                 <th>Status</th>
+                <th aria-label="Actions" />
               </tr>
             </thead>
             <tbody>
               {affirmations.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="empty">
+                  <td colSpan={6} className="empty">
                     No affirmations found.
                   </td>
                 </tr>
@@ -93,6 +94,11 @@ export default async function AffirmationsPage({ searchParams }) {
                         {a.text ? (
                           <div className="muted clamp-2">{a.text}</div>
                         ) : null}
+                      </td>
+                      <td className="affirmation-play-cell">
+                        <AffirmationPlayButton
+                          affirmation={a}
+                        />
                       </td>
                       <td>
                         {u._id ? (
@@ -117,6 +123,17 @@ export default async function AffirmationsPage({ searchParams }) {
                         ) : (
                           <span className="status active-status">Active</span>
                         )}
+                      </td>
+                      <td className="row-actions">
+                        <DeleteButton
+                          label="Delete"
+                          confirmText="Delete this affirmation?"
+                          href={`/api/admin/affirmations/${encodeURIComponent(
+                            a._id || a.id
+                          )}`}
+                          disabled={Boolean(a.isDeleted)}
+                          className="danger-button compact"
+                        />
                       </td>
                     </tr>
                   );

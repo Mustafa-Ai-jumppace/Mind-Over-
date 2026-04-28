@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getCurrentSession } from "../../lib/session";
+import { clearSessionCookie, getCurrentSession } from "../../lib/session";
 import * as authApi from "../../lib/api/auth";
 import AdminShell from "../../components/AdminShell";
 
@@ -22,6 +22,10 @@ export default async function AdminLayout({ children }) {
         role: (u.type || "Admin").toLowerCase(),
         profilePicture: u.profilePicture || null,
       };
+    }
+    if (!profile.ok && (profile.status === 401 || profile.status === 403)) {
+      await clearSessionCookie();
+      redirect("/login");
     }
   } catch {
     // Keep session fallback

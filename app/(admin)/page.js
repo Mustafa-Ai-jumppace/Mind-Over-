@@ -55,9 +55,6 @@ export default async function DashboardPage() {
         <section className="panel">
           <div className="panel-header">
             <h2>Content library</h2>
-            <span className="muted">
-              <code>GET /admin/dashboard/stats</code>
-            </span>
           </div>
           <div className="panel-body">
             <div className="stat-row">

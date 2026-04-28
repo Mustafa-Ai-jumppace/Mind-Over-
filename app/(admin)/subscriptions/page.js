@@ -40,14 +40,11 @@ export default async function SubscriptionsPage({ searchParams }) {
       <section className="panel">
         <div className="panel-header">
           <h2>Subscriptions</h2>
-          <span className="muted">
-            <code>GET /admin/subscriptions/list</code>
-          </span>
         </div>
         <div className="panel-filters">
           <ListFilters
             searchKey="userId"
-            searchPlaceholder="Filter by user ID…"
+            searchPlaceholder="Filter by user name…"
             filters={[
               {
                 key: "status",

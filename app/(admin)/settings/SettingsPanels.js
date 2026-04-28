@@ -10,11 +10,6 @@ export default function SettingsPanels({ initialEnabled }) {
   const [notifSaving, setNotifSaving] = useState(false);
   const [notifStatus, setNotifStatus] = useState(null);
 
-  const [confirmOpen, setConfirmOpen] = useState(false);
-  const [confirmText, setConfirmText] = useState("");
-  const [deleting, setDeleting] = useState(false);
-  const [deleteStatus, setDeleteStatus] = useState(null);
-
   async function toggleNotifications() {
     setNotifStatus(null);
     setNotifSaving(true);
@@ -42,31 +37,11 @@ export default function SettingsPanels({ initialEnabled }) {
     }
   }
 
-  async function deleteAccount() {
-    setDeleteStatus(null);
-    setDeleting(true);
-    try {
-      const response = await fetch("/api/account", { method: "POST" });
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok) {
-        throw new Error(data?.message || "Could not delete account.");
-      }
-      router.replace("/login");
-      router.refresh();
-    } catch (err) {
-      setDeleteStatus({ type: "error", message: err.message });
-      setDeleting(false);
-    }
-  }
-
   return (
     <>
       <section className="panel">
         <div className="panel-header">
           <h2>Notifications</h2>
-          <span className="muted">
-            <code>POST /auth/toggle-notification</code>
-          </span>
         </div>
         <div className="panel-body">
           <div className="toggle-row">
@@ -98,68 +73,6 @@ export default function SettingsPanels({ initialEnabled }) {
               {notifStatus.message}
             </div>
           ) : null}
-        </div>
-      </section>
-
-      <section className="panel danger-zone">
-        <div className="panel-header">
-          <h2>Danger zone</h2>
-          <span className="muted">
-            <code>POST /auth/delete-account</code>
-          </span>
-        </div>
-        <div className="panel-body">
-          <p>
-            This will permanently delete your admin account from the Mind Over
-            backend. You will be signed out immediately.
-          </p>
-
-          {deleteStatus ? (
-            <div className="alert alert-danger">{deleteStatus.message}</div>
-          ) : null}
-
-          {!confirmOpen ? (
-            <button
-              type="button"
-              className="danger-button"
-              onClick={() => setConfirmOpen(true)}
-            >
-              Delete my account
-            </button>
-          ) : (
-            <div className="confirm-box">
-              <p>
-                Type <code>DELETE</code> below to confirm account removal.
-              </p>
-              <input
-                value={confirmText}
-                onChange={(e) => setConfirmText(e.target.value)}
-                placeholder="DELETE"
-              />
-              <div className="form-actions">
-                <button
-                  type="button"
-                  className="ghost-button"
-                  onClick={() => {
-                    setConfirmOpen(false);
-                    setConfirmText("");
-                    setDeleteStatus(null);
-                  }}
-                  disabled={deleting}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  className="danger-button"
-                  disabled={confirmText !== "DELETE" || deleting}
-                  onClick={deleteAccount}
-                >
-                  {deleting ? "Deleting…" : "Confirm delete"}
-                </button>
-              </div>
-            </div>
-          )}
         </div>
       </section>
     </>

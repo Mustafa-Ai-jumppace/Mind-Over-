@@ -34,7 +34,6 @@ const NAV_GROUPS = [
     title: "Account",
     items: [
       { href: "/profile", label: "My profile", icon: "user" },
-      { href: "/settings", label: "Settings", icon: "cog" },
     ],
   },
 ];

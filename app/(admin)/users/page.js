@@ -3,6 +3,7 @@ import * as adminApi from "../../../lib/api/admin";
 import ListFilters from "../../../components/ListFilters";
 import Paginator from "../../../components/Paginator";
 import BlockUserButton from "../../../components/BlockUserButton";
+import DeleteButton from "../../../components/DeleteButton";
 import UserAvatar from "../../../components/UserAvatar";
 
 export const dynamic = "force-dynamic";
@@ -51,9 +52,6 @@ export default async function UsersPage({ searchParams }) {
       <section className="panel">
         <div className="panel-header">
           <h2>All users</h2>
-          <span className="muted">
-            <code>GET /admin/users</code>
-          </span>
         </div>
         <div className="panel-filters">
           <ListFilters
@@ -148,10 +146,21 @@ export default async function UsersPage({ searchParams }) {
                     <td>{formatDate(u.createdAt)}</td>
                     <td className="row-actions">
                       {u.type !== "Admin" ? (
-                        <BlockUserButton
-                          userId={u._id || u.id}
-                          isBlocked={Boolean(u.isBlocked)}
-                        />
+                        <div className="row-actions-group">
+                          <BlockUserButton
+                            userId={u._id || u.id}
+                            isBlocked={Boolean(u.isBlocked)}
+                          />
+                          <DeleteButton
+                            label="Delete"
+                            confirmText="Delete this user? This will remove their access."
+                            href={`/api/admin/users/${encodeURIComponent(
+                              u._id || u.id
+                            )}`}
+                            disabled={Boolean(u.isDeleted)}
+                            className="danger-button compact"
+                          />
+                        </div>
                       ) : (
                         <span className="tag ok">Admin</span>
                       )}

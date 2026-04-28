@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 const COOKIE_NAME = process.env.ADMIN_SESSION_COOKIE || "mo_admin_session";
 
-const PUBLIC_PATHS = new Set(["/login"]);
+const PUBLIC_PATHS = new Set(["/login", "/signup"]);
 
 export default function proxy(request) {
   const { pathname } = request.nextUrl;

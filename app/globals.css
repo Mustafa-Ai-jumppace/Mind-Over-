@@ -1069,10 +1069,62 @@ tr:hover td {
   text-align: right;
 }
 
+.row-actions-group {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.danger-button.compact,
+.ghost-button.compact {
+  padding: 8px 14px;
+  font-size: 13px;
+}
+
+.inline-action {
+  display: inline-grid;
+  gap: 6px;
+  justify-items: end;
+}
+
+.review-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .empty {
   text-align: center;
   color: var(--muted);
   padding: 28px !important;
+}
+
+.affirmation-play-cell {
+  width: 1%;
+  vertical-align: middle;
+}
+
+.affirmation-play-btn {
+  padding: 6px 12px;
+  min-width: 44px;
+  font-size: 13px;
+}
+
+.affirmation-play-btn--active {
+  background: var(--peach-soft);
+  border-color: var(--peach-dark);
+  color: var(--brand-dark);
+}
+
+.affirmation-play-icon {
+  display: inline-block;
+  line-height: 1;
+}
+
+.affirmation-play-empty {
+  font-size: 14px;
 }
 
 .search {

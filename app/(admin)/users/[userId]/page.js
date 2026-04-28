@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import * as adminApi from "../../../../lib/api/admin";
 import UserAvatar from "../../../../components/UserAvatar";
 import BlockUserButton from "../../../../components/BlockUserButton";
+import DeleteButton from "../../../../components/DeleteButton";
 
 export const dynamic = "force-dynamic";
 
@@ -92,10 +93,19 @@ export default async function UserDetailPage({ params }) {
           </div>
           <div className="user-hero-actions">
             {user.type !== "Admin" ? (
+            <div className="row-actions-group">
               <BlockUserButton
                 userId={user._id || user.id}
                 isBlocked={Boolean(user.isBlocked)}
               />
+              <DeleteButton
+                label="Delete"
+                confirmText="Delete this user? This will remove their access."
+                href={`/api/admin/users/${encodeURIComponent(user._id || user.id)}`}
+                disabled={Boolean(user.isDeleted)}
+                className="danger-button compact"
+              />
+            </div>
             ) : null}
           </div>
         </div>
@@ -124,9 +134,6 @@ export default async function UserDetailPage({ params }) {
         <div className="panel">
           <div className="panel-header">
             <h3>Subscriptions</h3>
-            <span className="muted">
-              <code>GET /admin/subscriptions/list</code>
-            </span>
           </div>
           <div className="panel-body">
             {subscriptions.length === 0 ? (
@@ -152,9 +159,6 @@ export default async function UserDetailPage({ params }) {
         <div className="panel">
           <div className="panel-header">
             <h3>Recent experiences</h3>
-            <span className="muted">
-              <code>GET /admin/experience/list</code>
-            </span>
           </div>
           <div className="panel-body">
             {experiences.length === 0 ? (
@@ -179,9 +183,6 @@ export default async function UserDetailPage({ params }) {
       <section className="panel">
         <div className="panel-header">
           <h3>Recent activity</h3>
-          <span className="muted">
-            <code>GET /admin/activity/list</code>
-          </span>
         </div>
         <div className="table-wrap">
           <table>

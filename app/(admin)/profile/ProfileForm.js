@@ -99,9 +99,6 @@ export default function ProfileForm({ initialUser }) {
       <section className="panel">
         <div className="panel-header">
           <h2>Profile details</h2>
-          <span className="muted">
-            <code>POST /auth/upsert-profile</code>
-          </span>
         </div>
 
         <form className="panel-body profile-form" onSubmit={saveProfile}>
@@ -156,9 +153,6 @@ export default function ProfileForm({ initialUser }) {
       <section className="panel">
         <div className="panel-header">
           <h2>Reset password</h2>
-          <span className="muted">
-            <code>POST /auth/reset-password</code>
-          </span>
         </div>
 
         <form className="panel-body profile-form" onSubmit={resetPassword}>

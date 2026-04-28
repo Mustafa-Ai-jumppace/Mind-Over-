@@ -55,7 +55,7 @@ function LoginForm() {
           className="segmented-item"
           role="tab"
           aria-selected="false"
-          disabled
+          onClick={() => router.push(`/signup?next=${encodeURIComponent(next)}`)}
         >
           Sign Up
         </button>

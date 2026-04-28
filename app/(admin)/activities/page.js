@@ -30,43 +30,46 @@ export default async function ActivitiesPage({ searchParams }) {
   const result = await adminApi.listActivities(query);
   const data = result.ok ? result.data : null;
   const error = result.ok ? null : result.error?.message;
-  const activities = data?.activities || [];
+  const hasUserId = Boolean(query.userId);
+  const activities = hasUserId ? data?.activities || [] : [];
+  const users = !hasUserId ? data?.users || [] : [];
 
   return (
     <div className="stack">
       <section className="panel">
         <div className="panel-header">
           <h2>Activity log</h2>
-          <span className="muted">
-            <code>GET /admin/activity/list</code>
-          </span>
         </div>
         <div className="panel-filters">
           <ListFilters
             searchKey="userId"
             searchPlaceholder="Filter by user ID…"
             filters={[
-              {
-                key: "type",
-                label: "Content type",
-                options: [
-                  { value: "all", label: "All types" },
-                  { value: "blend", label: "Blend" },
-                  { value: "affirmation", label: "Affirmation" },
-                  { value: "spotify_music", label: "Spotify" },
-                  { value: "apple_music", label: "Apple Music" },
-                ],
-              },
-              {
-                key: "activityType",
-                label: "Action",
-                options: [
-                  { value: "all", label: "All actions" },
-                  { value: "play", label: "Play" },
-                  { value: "created_blend", label: "Created blend" },
-                  { value: "created_affirmation", label: "Created affirmation" },
-                ],
-              },
+              ...(hasUserId
+                ? [
+                    {
+                      key: "type",
+                      label: "Content type",
+                      options: [
+                        { value: "all", label: "All types" },
+                        { value: "blend", label: "Blend" },
+                        { value: "affirmation", label: "Affirmation" },
+                        { value: "spotify_music", label: "Spotify" },
+                        { value: "apple_music", label: "Apple Music" },
+                      ],
+                    },
+                    {
+                      key: "activityType",
+                      label: "Action",
+                      options: [
+                        { value: "all", label: "All actions" },
+                        { value: "play", label: "Play" },
+                        { value: "created_blend", label: "Created blend" },
+                        { value: "created_affirmation", label: "Created affirmation" },
+                      ],
+                    },
+                  ]
+                : []),
             ]}
           />
         </div>
@@ -80,32 +83,78 @@ export default async function ActivitiesPage({ searchParams }) {
         <div className="table-wrap">
           <table>
             <thead>
-              <tr>
-                <th>When</th>
-                <th>User</th>
-                <th>Type</th>
-                <th>Action</th>
-              </tr>
+              {hasUserId ? (
+                <tr>
+                  <th>When</th>
+                  <th>User</th>
+                  <th>Type</th>
+                  <th>Action</th>
+                </tr>
+              ) : (
+                <tr>
+                  <th>User</th>
+                  <th>Total logs</th>
+                  <th>Last activity</th>
+                  <th></th>
+                </tr>
+              )}
             </thead>
             <tbody>
-              {activities.length === 0 ? (
+              {hasUserId ? (
+                activities.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="empty">
+                      No activity matches those filters.
+                    </td>
+                  </tr>
+                ) : (
+                  activities.map((a) => {
+                    const u = a.userId || {};
+                    return (
+                      <tr key={a._id || a.id}>
+                        <td>{formatDateTime(a.createdAt)}</td>
+                        <td>
+                          {u._id ? (
+                            <Link
+                              href={`/users/${u._id}`}
+                              className="user-cell linky"
+                            >
+                              <UserAvatar user={u} size={28} />
+                              <div>
+                                <strong>{u.name || "—"}</strong>
+                                <small>{u.email}</small>
+                              </div>
+                            </Link>
+                          ) : (
+                            <span className="muted">—</span>
+                          )}
+                        </td>
+                        <td>
+                          <span className="tag">{a.type || "—"}</span>
+                        </td>
+                        <td>{a.activityType || "—"}</td>
+                      </tr>
+                    );
+                  })
+                )
+              ) : users.length === 0 ? (
                 <tr>
                   <td colSpan={4} className="empty">
                     No activity matches those filters.
                   </td>
                 </tr>
               ) : (
-                activities.map((a) => {
-                  const u = a.userId || {};
+                users.map((row) => {
+                  const u = row.user || {};
+                  const id = row.userId || u._id;
+                  const href = id
+                    ? `/activities?userId=${encodeURIComponent(id)}`
+                    : "/activities";
                   return (
-                    <tr key={a._id || a.id}>
-                      <td>{formatDateTime(a.createdAt)}</td>
+                    <tr key={id || `${u.email}-${row.lastActivityAt}`}>
                       <td>
                         {u._id ? (
-                          <Link
-                            href={`/users/${u._id}`}
-                            className="user-cell linky"
-                          >
+                          <Link href={`/users/${u._id}`} className="user-cell linky">
                             <UserAvatar user={u} size={28} />
                             <div>
                               <strong>{u.name || "—"}</strong>
@@ -117,9 +166,18 @@ export default async function ActivitiesPage({ searchParams }) {
                         )}
                       </td>
                       <td>
-                        <span className="tag">{a.type || "—"}</span>
+                        <span className="tag">{row.totalLogs ?? "—"}</span>
                       </td>
-                      <td>{a.activityType || "—"}</td>
+                      <td>{formatDateTime(row.lastActivityAt)}</td>
+                      <td className="row-actions">
+                        {id ? (
+                          <Link className="ghost-button" href={href}>
+                            View logs
+                          </Link>
+                        ) : (
+                          <span className="muted">—</span>
+                        )}
+                      </td>
                     </tr>
                   );
                 })
