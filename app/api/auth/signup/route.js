@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import * as authApi from "../../../../../lib/api/auth";
+import * as authApi from "../../../../lib/api/auth";
 
 export async function POST(request) {
   let body;
