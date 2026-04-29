@@ -1,11 +1,22 @@
 node_modules
 .next
 .DS_Store
+
+# Environment files (never commit)
 .env
-.env.example
-.env.local
 .env.*.local
+.env.local
+.env.example
+
+# Local notes / scratch docs (keep repo clean)
 TIMENOTES.md
+TIMENOTES*.md
+*NOTES*.md
+*notes*.md
+*_private.md
+*_PRIVATE.md
+*_local.md
+*_LOCAL.md
 .tmp-*
 .cookies.txt
 npm-debug.log*
